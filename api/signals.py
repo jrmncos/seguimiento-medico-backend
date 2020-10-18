@@ -12,3 +12,7 @@ def update_user_profile(sender, instance, created, **kwargs):
         Paciente.objects.create(
             user=instance
         )
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.paciente_profile.save()

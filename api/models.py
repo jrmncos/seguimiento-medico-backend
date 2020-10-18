@@ -5,7 +5,6 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from .managers import UserManager
 
-# Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'))
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
@@ -17,14 +16,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text=_('Designates whether the user can log into this admin site.'),
     )
-    #avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     
     bod = models.DateField(blank=True, null=True)
     dni = models.IntegerField(unique=True)
     latitude = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
     
-
     objects = UserManager()
 
     USERNAME_FIELD = 'dni'
@@ -55,12 +52,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
        return str(self.dni) + str(self.first_name)
-"""
-class User(AbstractUser):
-    bod = models.DateField(blank=True, null=True)
-    location = models.CharField(max_length=30,)
-    dni = models.IntegerField(unique=True)
-"""
     
 class ECNT(models.Model):
     nombre = models.CharField(max_length=30)
@@ -71,17 +62,11 @@ class ECNT(models.Model):
 
 class Paciente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente_profile')
-    ecnts = models.ManyToManyField(ECNT, related_name='paciente_profile', blank=True)
-    
-    def __str__(self):
-        return "Paciente: " + str(self.user.dni)
+    ultimo_autocontrol = models.CharField(max_length=30, null=True)
+    ecnts = models.ManyToManyField(ECNT, related_name='paciente_list', blank=True)
 
-class Profesional(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
     def __str__(self):
-        return "Profesional: " +str(self.user.dni)
-
+        return "{} | {}".format(self.user.dni, self.user.first_name)
 
 class AutocontrolDiabetes(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
