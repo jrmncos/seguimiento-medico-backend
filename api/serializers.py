@@ -6,15 +6,15 @@ from .models import User, ECNT, Paciente
 class PacienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Paciente
-        fields = ['user', 'ecnts']
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['dni','first_name', 'last_name', 'password', 'location', 'bod', 'latitude', 'longitude']
+        fields = ['dni','first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude']
 
 class ECNTSerializer(serializers.ModelSerializer):
     pacientes = PacienteSerializer(many=True, read_only=True)
     class Meta:
         model = ECNT
-        fields = ['nombre', 'descripcion', 'pacientes']
+        fields = '__all__'

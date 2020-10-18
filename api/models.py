@@ -20,10 +20,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     #avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     
     bod = models.DateField(blank=True, null=True)
-    location = models.CharField(max_length=30,)
     dni = models.IntegerField(unique=True)
     latitude = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
+    
 
     objects = UserManager()
 
@@ -68,10 +68,33 @@ class ECNT(models.Model):
 
     def __str__(self):
         return str(self.nombre)
-    
+
 class Paciente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente_profile')
+    ecnts = models.ManyToManyField(ECNT, related_name='paciente_profile', blank=True)
+    
+    def __str__(self):
+        return "Paciente: " + str(self.user.dni)
+
+class Profesional(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    ecnts = models.ManyToManyField(ECNT, related_name='pacientes', blank=True)
+    
+    def __str__(self):
+        return "Profesional: " +str(self.user.dni)
+
+
+class AutocontrolDiabetes(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    glucemia_matutina = models.BooleanField()
+    glucemia_post_comida_principal = models.BooleanField()
+    hora_registro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.user.dni)
+        return "Glucemia matutina: " + str(glucemia_matutina) + "Glucemia post comida principal: " + str(glucemia_post_comida_principal)
+
+class AutocontrolDiabetesExtra(models.Model):
+    autocontrol_diabetes = models.OneToOneField(AutocontrolDiabetes, on_delete=models.CASCADE)
+    aumento_fatiga = models.BooleanField(blank=True)
+    perdida_memoria = models.BooleanField(blank=True)
+    cambio_orina = models.BooleanField(blank=True)
+    perdida_vision = models.BooleanField(blank=True)
