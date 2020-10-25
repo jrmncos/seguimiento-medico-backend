@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins, generics
 from .models import User, ECNT, Paciente
-from .serializers import UserSerializer, ECNTSerializer, PacienteSerializer
+from .serializers import UserSerializer, PacienteSerializer, ECNTSerializer
 # Create your views here.
 from rest_framework.response import Response
 from rest_framework import status
-class UserViewSet(viewsets.ViewSet):
 
+"""
+class UserViewSet(viewsets.ViewSet):
     def list(self, request):
        queryset = User.objects.all()
        serializer = UserSerializer(queryset, many=True)
@@ -25,7 +26,7 @@ class UserViewSet(viewsets.ViewSet):
         user = get_object_or_404(queryset, pk=pk)
         serializer = UserSerializer(user)
         return Response(serializer.data)
-    
+    #Falta implementar
     def partial_update(self, request, *args, **kwargs):
         print('Partial update')
         print(**kwargs)
@@ -35,3 +36,13 @@ class UserViewSet(viewsets.ViewSet):
         #instance = queryset.get(pk=)
         #serializer = UserSerializer(data=request.data, )
         return True
+"""
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = ECNT.objects.all()
+    serializer_class = ECNTSerializer

@@ -1,4 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
+from decimal import Decimal
+from datetime import datetime
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -22,7 +24,9 @@ class UserManager(BaseUserManager):
     def create_superuser(self, dni, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
-
+        extra_fields.setdefault('latitude', Decimal('0.0'))
+        extra_fields.setdefault('longitude', Decimal('0.0'))
+        extra_fields.setdefault('bod', '1990-05-05')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 

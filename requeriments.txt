@@ -1,2 +1,5 @@
 django
 djangorestframework
+pytest-django
+pytest-cov
+pytest-pythonpath

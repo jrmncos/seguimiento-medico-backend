@@ -1,32 +1,32 @@
-from django.test import TestCase
 
-from .models import User, Paciente
-from .serializers import PacienteSerializer, UserSerializer
-from datetime import date
+import datetime
+import json
+from time import strftime
 
-from rest_framework.test import APITestCase, APIClient
+import pytest
 from django.urls import reverse
+from django_mock_queries.query import MockSet
+from rest_framework.exceptions import ValidationError
 from rest_framework import status
 
-# Create your tests here.
-"""
-class PacienteTest(TestCase):
 
-    def test_user_model_has_profile(self):
-        user = User(
-            dni='40861249',
-            password='abc1cba'
-        )
-        user.save()
+from .models import User
+from .serializers import UserSerializer
+from .views import UserViewSet
 
-        self.assertTrue(
-            hasattr(user,'paciente_profile')
-        )
-""" 
-        
-class  UserTestAPI(APITestCase):
 
-    @classmethod
+
+
+
+
+
+class  UserTestAPI:
+
+    @pytest.mark.urls('api.urls')
+    def test_list(self, rf, mocker):
+        assert 1 == 1
+
+    """
     def setUpTestData(cls):
         cls.user1 = User.objects.create(
             dni=41861249, 
@@ -62,22 +62,7 @@ class  UserTestAPI(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_create_user(self):
-        userJson = {
-            'first_name': 'German',
-            'last_name': 'Costilla',
-            'dni': '40861249',
-            'bod': '1990-10-12',
-            'latitude': '35.0653',
-            'longitude': '35.0653',
-            'password':'abc1cba',
-            'paciente_profile': {
-                'ultimo_autocontrol': 'hoy',
-                'ecnts': [
-                    {'nombre': 'diabetes',
-                    'descripcion': 'nivelGlucemia'}
-                ]       
-            }
-        }
+        userJson = {"dni":"23649864","first_name":"Germán","last_name":"Tres","latitude":-34.55877276343772,"longitude":-58.74483676627278,"bod":"1990-05-05","password":"cosri8773","paciente_profile":{"ultimo_autocontrol":"hoy","ecnts":[{"nombre":"diabetes","descripcion":"nivel de glucemia elevado"}]}}
         
         response = self.client.post(
             reverse('user-list'), userJson, format='json'
@@ -106,45 +91,4 @@ class  UserTestAPI(APITestCase):
         )
         self.assertEquals(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-        
-    """
-    def test_put_paciente(self):
-        pass
-        
-            expected_results = {
-            'first_name': 'German',
-            'last_name': 'Costilla',
-            'dni': '40861249',
-            'bod': '05/05/1990',
-            'latitude': '35.0653',
-            'longitude': '35.0653',
-            'password':'abc1cba',
-            'paciente_profile': {
-                'ultimo_autocontrol': 'hoy'
-            }
-        }
-
-        data = {
-            "dni": 76532565,
-            "first_name": "gerr",
-            "last_name": "costtt",
-            "password": "costi8773",
-            "bod": "2020-10-18",
-            "latitude": "53.3235000000000000",
-            "longitude": "26.2356000000000000",
-            "paciente_profile": {
-                "ultimo_autocontrol": "Hola"
-            }
-        }
-        response = self.client.put(
-            '/api/users/',
-            data,
-            format='json'
-        )
-
-        serialize = UserSerializer(data=data)
-        print("RESP")
-        print(serialize.is_valid())
-
-        self.assertEqual(len(Paciente.objects.all()), 3)
-    """
+"""

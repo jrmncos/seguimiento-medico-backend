@@ -4,23 +4,20 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from .managers import UserManager
+from decimal import Decimal
+import datetime
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'))
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    email = models.EmailField(_('email address'), blank=True)
+    first_name = models.CharField(_('first name'), max_length=30)
+    last_name = models.CharField(_('last name'), max_length=30)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
-    is_staff = models.BooleanField(
-        _('staff status'),
-        default=False,
-        help_text=_('Designates whether the user can log into this admin site.'),
-    )
-    
-    bod = models.DateField(blank=True, null=True)
+    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designates whether the user can log into this admin site.'))
+    bod = models.DateField()
     dni = models.IntegerField(unique=True)
-    latitude = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
-    longitude = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
+    latitude = models.DecimalField(max_digits=20, decimal_places=16)
+    longitude = models.DecimalField(max_digits=20, decimal_places=16)
     
     objects = UserManager()
 
@@ -51,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
     
     def __str__(self):
-       return str(self.dni) + str(self.first_name)
+       return str(self.dni) +" "+ str(self.first_name)
     
 class ECNT(models.Model):
     nombre = models.CharField(max_length=30)
@@ -68,6 +65,7 @@ class Paciente(models.Model):
     def __str__(self):
         return "{} | {}".format(self.user.dni, self.user.first_name)
 
+
 class AutocontrolDiabetes(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     glucemia_matutina = models.BooleanField()
@@ -77,8 +75,8 @@ class AutocontrolDiabetes(models.Model):
     def __str__(self):
         return "Glucemia matutina: " + str(glucemia_matutina) + "Glucemia post comida principal: " + str(glucemia_post_comida_principal)
 
-class AutocontrolDiabetesExtra(models.Model):
-    autocontrol_diabetes = models.OneToOneField(AutocontrolDiabetes, on_delete=models.CASCADE)
+class AutocontrolDiabetesOpcional(models.Model):
+    autocontrol_diabetes = models.OneToOneField(AutocontrolDiabetes, on_delete=models.CASCADE, related_name='autocontrol_opcional')
     aumento_fatiga = models.BooleanField(blank=True)
     perdida_memoria = models.BooleanField(blank=True)
     cambio_orina = models.BooleanField(blank=True)
