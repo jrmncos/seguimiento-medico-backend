@@ -6,7 +6,7 @@ from .serializers import UserSerializer, PacienteSerializer, ECNTSerializer
 # Create your views here.
 from rest_framework.response import Response
 from rest_framework import status
-
+from rest_framework.permissions import IsAuthenticated
 """
 class UserViewSet(viewsets.ViewSet):
     def list(self, request):
@@ -46,3 +46,4 @@ class UserViewSet(viewsets.ModelViewSet):
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ECNT.objects.all()
     serializer_class = ECNTSerializer
+    permission_classes = (IsAuthenticated,)

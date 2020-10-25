@@ -16,10 +16,6 @@ from .views import UserViewSet
 
 
 
-
-
-
-
 class  UserTestAPI:
 
     @pytest.mark.urls('api.urls')

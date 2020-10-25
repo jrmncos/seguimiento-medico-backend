@@ -26,8 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
         if value.isalnum():
             raise serializers.ValidationError('password must have atleast one special character.')
         return value
-    """
-    """
+
     Con este metodo puedo pre-procesar el diccionario que viene del frontend
     def to_internal_value(self, data):
         user_data = data['user']
@@ -41,17 +40,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id','dni','first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude']
+        fields = ['id', 'dni', 'first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude']
         #Implicitamente se valida todo lo del model + el id va solo en la serializacion y la pass en la deserializacion
         extra_kwargs = {
             'id': {'read_only': True},
             'password': {'write_only': True}
         }
     
-    """
+    
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
-    """
+    
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECNT
