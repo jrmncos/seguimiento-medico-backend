@@ -50,11 +50,13 @@ class UserSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
-    
+
+        
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECNT
         fields = ['id','nombre', 'descripcion']
+        read_only_fields = ('id', 'descripcion')
         
 
 class PacienteSerializer(serializers.ModelSerializer):

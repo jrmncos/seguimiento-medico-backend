@@ -3,3 +3,4 @@ djangorestframework
 pytest-django
 pytest-cov
 pytest-pythonpath
+pytest-mock

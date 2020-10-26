@@ -16,8 +16,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designates whether the user can log into this admin site.'))
     bod = models.DateField()
     dni = models.IntegerField(unique=True)
-    latitude = models.DecimalField(max_digits=20, decimal_places=16)
-    longitude = models.DecimalField(max_digits=20, decimal_places=16)
+    latitude = models.DecimalField(max_digits=20, decimal_places=12)
+    longitude = models.DecimalField(max_digits=20, decimal_places=12)
     
     objects = UserManager()
 
