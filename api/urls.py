@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework import routers
-from .views import UserViewSet, ECNTViewSet
+from .views import UserViewSet, ECNTViewSet, PacienteViewSet
 #from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 from api.auth.views import obtain_auth_token
 from django.urls import path
@@ -8,6 +8,7 @@ from django.urls import path
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'ecnts', ECNTViewSet, basename='ecnt')
+router.register(r'pacientes', PacienteViewSet, basename='paciente')
 #router.register(r'token', ObtainAuthToken, basename='token')
 
 urlpatterns = [

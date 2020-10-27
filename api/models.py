@@ -68,10 +68,12 @@ class Paciente(models.Model):
 
 class AutocontrolDiabetes(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    glucemia_matutina = models.BooleanField()
-    glucemia_post_comida_principal = models.BooleanField()
-    hora_registro = models.DateTimeField(auto_now_add=True)
-
+    glucemia_matutina = models.BooleanField(null = True)
+    opcional_glucemia_matutina = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
+    glucemia_post_comida_principal = models.BooleanField(null = True)
+    opcional_glucemia_comida_principal = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
+    fecha_hora_registro = models.DateTimeField(auto_now_add=True)
+    
     def __str__(self):
         return "Glucemia matutina: " + str(glucemia_matutina) + "Glucemia post comida principal: " + str(glucemia_post_comida_principal)
 

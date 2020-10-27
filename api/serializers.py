@@ -32,12 +32,13 @@ class UserSerializer(serializers.ModelSerializer):
         user_data = data['user']
         return super().to_internal_value(user_data)
         {'dni' : 40861249 }
-    """
+    
     def validate(self, data):
+        print(data)
         if data['first_name'] == data['last_name']:
             raise serializers.ValidationError("first_name and last_name shouldn't be same.")
         return data
-
+    """
     class Meta:
         model = User
         fields = ['id', 'dni', 'first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude']
@@ -49,9 +50,16 @@ class UserSerializer(serializers.ModelSerializer):
     
     
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+       return User.objects.create_user(**validated_data)
+       
+    
+class ACDiabetesSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    class Meta:
+        model = AutocontrolDiabetes
+        fields = '__all__'
 
-        
+
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECNT
@@ -60,11 +68,12 @@ class ECNTSerializer(serializers.ModelSerializer):
         
 
 class PacienteSerializer(serializers.ModelSerializer):
-    ecnts =  ECNTSerializer(many=True, required=True)
-    user = UserSerializer(required=True)
+    #ecnts =  ECNTSerializer(many=True, required=False)
+    user = UserSerializer(required=False)
     
     class Meta:
         model = Paciente
         fields = ['id','ultimo_autocontrol', 'ecnts', 'user']
-        read_only_fields = ('id')
+        read_only_fields = ('id', 'user')
+
     

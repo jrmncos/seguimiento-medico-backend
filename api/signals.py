@@ -4,7 +4,7 @@ from django.db.models.signals import(
 )
 
 from .models import User, Paciente
-"""
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     #update user profile
@@ -16,4 +16,3 @@ def update_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.paciente_profile.save()
-"""

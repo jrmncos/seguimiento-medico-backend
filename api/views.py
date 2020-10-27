@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, generics
-from .models import User, ECNT, Paciente
-from .serializers import UserSerializer, PacienteSerializer, ECNTSerializer
+from .models import User, ECNT, Paciente, AutocontrolDiabetes
+from .serializers import UserSerializer, PacienteSerializer, ECNTSerializer, ACDiabetesSerializer
 # Create your views here.
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 """
 class UserViewSet(viewsets.ViewSet):
     def list(self, request):
@@ -43,7 +44,23 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    @action(methods=['get'], detail=True)
+    def get_paciente_id(self, request, pk=None):
+        user = get_object_or_404(self.queryset, pk=pk)
+        paciente_id = user.paciente_profile.id
+        print(paciente_id)
+        return Response({'id':paciente_id})
+        
+class PacienteViewSet(viewsets.ModelViewSet):
+    queryset = Paciente.objects.all()
+    serializer_class = PacienteSerializer
+    
+
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ECNT.objects.all()
     serializer_class = ECNTSerializer
     permission_classes = (IsAuthenticated,)
+
+class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
+    queryset = AutocontrolDiabetes.objects.all()
+    serializer_class = ACDiabetesSerializer
