@@ -54,7 +54,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class PacienteViewSet(viewsets.ModelViewSet):
     queryset = Paciente.objects.all()
     serializer_class = PacienteSerializer
-    
+
 
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ECNT.objects.all()
@@ -64,3 +64,5 @@ class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gener
 class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
     queryset = AutocontrolDiabetes.objects.all()
     serializer_class = ACDiabetesSerializer
+
+    

@@ -53,12 +53,6 @@ class UserSerializer(serializers.ModelSerializer):
        return User.objects.create_user(**validated_data)
        
     
-class ACDiabetesSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
-    class Meta:
-        model = AutocontrolDiabetes
-        fields = '__all__'
-
 
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,7 +62,7 @@ class ECNTSerializer(serializers.ModelSerializer):
         
 
 class PacienteSerializer(serializers.ModelSerializer):
-    #ecnts =  ECNTSerializer(many=True, required=False)
+    ecnts =  ECNTSerializer(many=True, required=False)
     user = UserSerializer(required=False)
     
     class Meta:
@@ -76,4 +70,8 @@ class PacienteSerializer(serializers.ModelSerializer):
         fields = ['id','ultimo_autocontrol', 'ecnts', 'user']
         read_only_fields = ('id', 'user')
 
-    
+class ACDiabetesSerializer(serializers.ModelSerializer):
+    paciente_id = serializers.IntegerField()
+    class Meta:
+        model = AutocontrolDiabetes
+        fields = ['id', 'glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal', 'paciente_id']
