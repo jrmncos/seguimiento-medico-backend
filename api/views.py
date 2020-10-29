@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+
+from .services import AutocontrolDiabetesService
+
 """
 class UserViewSet(viewsets.ViewSet):
     def list(self, request):
@@ -39,7 +42,6 @@ class UserViewSet(viewsets.ViewSet):
         return True
 """
 
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -52,9 +54,8 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({'id':paciente_id})
         
 class PacienteViewSet(viewsets.ModelViewSet):
-    queryset = Paciente.objects.all()
+    queryset = Paciente.objects.all() 
     serializer_class = PacienteSerializer
-
 
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ECNT.objects.all()
@@ -65,4 +66,8 @@ class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
     queryset = AutocontrolDiabetes.objects.all()
     serializer_class = ACDiabetesSerializer
 
-    
+    def perform_create(self, serializer):
+        autocontrol_service = AutocontrolDiabetesService()
+        autocontrol_service.check_autocontrol(serializer.validated_data)
+        
+        super().perform_create(serializer)
