@@ -83,3 +83,14 @@ class AutocontrolDiabetesOpcional(models.Model):
     perdida_memoria = models.BooleanField(blank=True)
     cambio_orina = models.BooleanField(blank=True)
     perdida_vision = models.BooleanField(blank=True)
+
+
+class Notificacion(models.Model):
+    #notificador = models.OneToOneField(User)
+    texto = models.CharField(max_length=150)
+    imagen = models.ImageField()
+    #ecnts = models.ManyToManyField()
+    #generos = models.Choices()
+    #edades = models.Choices()
+    def __str__(self):
+        return self.imagen.name

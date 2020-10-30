@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, generics
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser 
 from .models import User, ECNT, Paciente, AutocontrolDiabetes
 from .serializers import UserSerializer, PacienteSerializer, ECNTSerializer, ACDiabetesSerializer
 # Create your views here.
@@ -71,3 +73,14 @@ class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
         autocontrol_service.check_autocontrol(serializer.validated_data)
         
         super().perform_create(serializer)
+
+class NotificacionView(APIView):
+    parser_classes = (MultiPartParser,)
+
+    def post(self, request, *args, **kwargs):
+        serializer = NotificacionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
