@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, generics
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser 
-from .models import User, ECNT, Paciente, AutocontrolDiabetes
-from .serializers import UserSerializer, PacienteSerializer, ECNTSerializer, ACDiabetesSerializer
+from .models import *
+from .serializers import *
 # Create your views here.
 from rest_framework.response import Response
 from rest_framework import status
@@ -74,13 +74,23 @@ class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
         
         super().perform_create(serializer)
 
-class NotificacionView(APIView):
+class NotificacionView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     parser_classes = (MultiPartParser,)
-
+    queryset = Notificacion.objects.all()
+    serializer_class = NotificacionSerializer
+    """
     def post(self, request, *args, **kwargs):
+        print(request.data)
+        print(request.instance)
         serializer = NotificacionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    """
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

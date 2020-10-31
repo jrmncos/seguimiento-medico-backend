@@ -4,7 +4,7 @@ from .views import *
 #from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 from api.auth.views import obtain_auth_token
 from django.urls import path
-
+from django.conf import settings
 router = routers.SimpleRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'ecnts', ECNTViewSet, basename='ecnt')

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import User, ECNT, Paciente, AutocontrolDiabetes, Notificacion
+from .models import *
 
 # {FORM1 + FORM2 + FORM3}
 
@@ -76,7 +76,7 @@ class ACDiabetesSerializer(serializers.ModelSerializer):
         model = AutocontrolDiabetes
         fields = ['id', 'glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal', 'paciente_id']
 
-class NotificacionSerializer(serializers.ModelField):
+class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion
-        fields = '__all__'
+        fields = ['id','texto', 'imagen']

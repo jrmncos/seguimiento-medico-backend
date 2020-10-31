@@ -6,3 +6,4 @@ pytest-pythonpath
 pytest-mock
 exponent_server_sdk
 pillow
+django-cors-headers
