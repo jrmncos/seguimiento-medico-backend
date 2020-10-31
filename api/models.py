@@ -7,7 +7,13 @@ from .managers import UserManager
 from decimal import Decimal
 import datetime
 
+GENDER_CHOICES = (
+    ('Femenino', 'Femenino'),
+    ('Masculino', 'Masculino')
+)
+
 class User(AbstractBaseUser, PermissionsMixin):
+ 
     email = models.EmailField(_('email address'), blank=True)
     first_name = models.CharField(_('first name'), max_length=30)
     last_name = models.CharField(_('last name'), max_length=30)
@@ -16,9 +22,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designates whether the user can log into this admin site.'))
     bod = models.DateField()
     dni = models.IntegerField(unique=True)
-    latitude = models.DecimalField(max_digits=20, decimal_places=12)
-    longitude = models.DecimalField(max_digits=20, decimal_places=12)
-    
+    latitude = models.DecimalField(max_digits=20, decimal_places=15)
+    longitude = models.DecimalField(max_digits=20, decimal_places=15)
+    expo_token = models.CharField(max_length=100)
+    gender = models.CharField(max_length=9, choices=GENDER_CHOICES, default='F')
+
     objects = UserManager()
 
     USERNAME_FIELD = 'dni'

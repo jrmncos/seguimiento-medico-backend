@@ -41,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ['id', 'dni', 'first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude']
+        fields = ['id', 'dni', 'first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude', 'gender', 'expo_token']
         #Implicitamente se valida todo lo del model + el id va solo en la serializacion y la pass en la deserializacion
         extra_kwargs = {
             'id': {'read_only': True},
