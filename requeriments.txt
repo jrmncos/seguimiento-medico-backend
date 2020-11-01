@@ -7,3 +7,4 @@ pytest-mock
 exponent_server_sdk
 pillow
 django-cors-headers
+django-oauth-toolkit
