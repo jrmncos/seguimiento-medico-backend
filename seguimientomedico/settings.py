@@ -55,11 +55,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
-"""
-'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',  
-    ],
-"""
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -151,7 +147,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+LOGIN_URL='/admin/login/'
+
 OAUTH2_PROVIDER = {
     # this is the list of available scopes
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
+    #'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 }
