@@ -48,7 +48,7 @@ class UserViewSet(viewsets.ViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
     @action(methods=['get'], detail=True)
     def get_paciente_id(self, request, pk=None):

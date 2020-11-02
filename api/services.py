@@ -1,4 +1,5 @@
 from .push_notifications import *
+from .models import User
 
 class AutocontrolDiabetesService:
     def check_autocontrol(self, autocontrol):
@@ -8,4 +9,8 @@ class AutocontrolDiabetesService:
 class NotificadorService:
     def send_notificacion(self, notificacion):
         print("Les voy a enviar la notificacion a todes.")
-        
+        users = User.objects.all()
+        for user in users:
+            send_push_message(token=user.expo_token, message=notificacion['texto'])
+            
+            
