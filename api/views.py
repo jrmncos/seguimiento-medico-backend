@@ -48,18 +48,34 @@ class UserViewSet(viewsets.ViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
+    """
     @action(methods=['get'], detail=True)
-    def get_paciente_id(self, request, pk=None):
+    def get_id_paciente(self, request, pk=None):
         user = get_object_or_404(self.queryset, pk=pk)
         paciente_id = user.paciente_profile.id
         print(paciente_id)
         return Response({'id':paciente_id})
+    """
+
+    @action(methods=['get'], detail=False, url_path='dni/(?P<dni>[^/.]+)')
+    def get_user_by_dni(self, request, dni):
+        user = get_object_or_404(self.queryset, dni=dni)
+        data = UserSerializer(user, context={'request':request}).data
+        return Response(data, status=status.HTTP_200_OK)
         
 class PacienteViewSet(viewsets.ModelViewSet):
     queryset = Paciente.objects.all() 
     serializer_class = PacienteSerializer
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    
+    #paciente/dni/40861249
+    @action(methods=['get'], detail=False, url_path='dni/(?P<dni>[^/.]+)')
+    def get_paciente_by_dni(self, request, dni):
+        user = get_object_or_404(self.queryset, user__dni=dni)
+        data = PacienteSerializer(user, context={'request':request}).data
+        return Response(data, status=status.HTTP_200_OK)
 
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ECNT.objects.all()
