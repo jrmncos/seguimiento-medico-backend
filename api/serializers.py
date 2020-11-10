@@ -57,8 +57,8 @@ class UserSerializer(serializers.ModelSerializer):
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECNT
-        fields = ['id','nombre', 'descripcion']
-        read_only_fields = ('id', 'descripcion')
+        fields = ['id','nombre']
+        read_only_fields = ('id')
         
 
 class PacienteSerializer(serializers.ModelSerializer):

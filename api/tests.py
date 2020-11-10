@@ -11,7 +11,9 @@ from rest_framework.test import APITestCase
 from rest_framework.exceptions import ValidationError
 from django.test import TestCase
 
-
+"""
+Al crear un user se crea un paciente
+"""
 class UserProfileTest(TestCase):
     def test_user_model_has_profile(self):
         user = User(email = "santiagodgalvan@gmail.com",
@@ -86,6 +88,35 @@ class TestUserViewSet:
 
         assert response.status_code == 200
         assert len(json.loads(response.content)) == 2
+
+    @pytest.mark.urls('api.urls')
+    def test_get_user_by_dni(self, rf, mocker):
+        url = reverse('user-list')
+        print(rf)
+        request = rf.get(url+"/dni/38692907")
+
+        queryset = MockSet(
+            User(email = "santiagodgalvan@gmail.com",
+                first_name = "Santiago",
+                last_name = "Galvan",
+                bod = "1995-01-05",
+                dni = 38692907,
+                latitude = -34.500728717200,
+                longitude = -58.725495777400),
+            User(email = "gercos@gmail.com",
+                first_name = "Costilla",
+                last_name = "German",
+                bod = "1998-02-04",
+                dni = 40263952,
+                latitude = -34.541521068900, 
+                longitude =  -58.713934007600)
+        )
+
+        mocker.patch.object(UserViewSet, 'get_queryset', return_value=queryset)
+        response = UserViewSet.as_view({'get': 'list'})(request).render()
+
+        assert response.status_code == 200
+        assert len(json.loads(response.content)).get('dni') == 38692907
     
     @pytest.mark.urls('api.urls')
     @pytest.mark.django_db

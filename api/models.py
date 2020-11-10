@@ -60,8 +60,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 class ECNT(models.Model):
     nombre = models.CharField(max_length=30)
-    descripcion = models.CharField(max_length=30, blank=True)
-
     def __str__(self):
         return str(self.nombre)
 
@@ -97,7 +95,7 @@ class Notificacion(models.Model):
     #notificador = models.OneToOneField(User)
     texto = models.CharField(max_length=150)
     imagen = models.ImageField()
-    #ecnts = models.ManyToManyField()
+    #ecnts = models.ManyToManyField(ECNT, related_name='notificaciones')
     #generos = models.Choices()
     #edades = models.Choices()
     def __str__(self):

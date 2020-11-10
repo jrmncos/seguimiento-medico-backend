@@ -7,7 +7,7 @@ class AutocontrolDiabetesService:
         send_push_message(token="ExponentPushToken[JdQCN9J3DdXe_t6uBhV3jJ]", message="Soy la segunda notificacion push")
 
 class NotificadorService:
-    def send_notificacion(self, notificacion):
+    def send_notificacion(self, notificacion, filtros):
         print("Les voy a enviar la notificacion a todes.")
         users = User.objects.all()
         for user in users:

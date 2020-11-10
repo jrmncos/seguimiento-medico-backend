@@ -69,7 +69,7 @@ class PacienteViewSet(viewsets.ModelViewSet):
     queryset = Paciente.objects.all() 
     serializer_class = PacienteSerializer
     permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-    
+
     #paciente/dni/40861249
     @action(methods=['get'], detail=False, url_path='dni/(?P<dni>[^/.]+)')
     def get_paciente_by_dni(self, request, dni):
@@ -98,8 +98,16 @@ class NotificacionView(generics.CreateAPIView, generics.ListAPIView):
     queryset = Notificacion.objects.all()
     serializer_class = NotificacionSerializer
     
-    def perform_create(self, serializer):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer, request)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer, request):
         enviador_notificaciones = NotificadorService()
-        enviador_notificaciones.send_notificacion(serializer.validated_data)
+        print(request.data)
+        enviador_notificaciones.send_notificacion(serializer.validated_data, filtros)
         super().perform_create(serializer)
         
