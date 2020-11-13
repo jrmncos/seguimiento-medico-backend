@@ -48,7 +48,7 @@ class UserViewSet(viewsets.ViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
     """
     @action(methods=['get'], detail=True)
@@ -68,7 +68,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class PacienteViewSet(viewsets.ModelViewSet):
     queryset = Paciente.objects.all() 
     serializer_class = PacienteSerializer
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
     #paciente/dni/40861249
     @action(methods=['get'], detail=False, url_path='dni/(?P<dni>[^/.]+)')

@@ -52,14 +52,11 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
        return User.objects.create_user(**validated_data)
        
-    
-
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECNT
-        fields = ['id','nombre']
-        read_only_fields = ('id')
-        
+        fields = ['id','nombre', 'descripcion']
+        read_only_fields = ('id', )
 
 class PacienteSerializer(serializers.ModelSerializer):
     ecnts =  ECNTSerializer(many=True, required=False)
