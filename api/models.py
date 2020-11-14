@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.mail import send_mail
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, Group
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from .managers import UserManager
@@ -11,6 +11,10 @@ GENDER_CHOICES = (
     ('Femenino', 'Femenino'),
     ('Masculino', 'Masculino')
 )
+
+paciente, created = Group.objects.get_or_create(name='Paciente')
+promotorSalud, created = Group.objects.get_or_create(name='Promotor de Salud')
+profesionalSalud, created = Group.objects.get_or_create(name='Profesional de Salud')
 
 class User(AbstractBaseUser, PermissionsMixin):
  
@@ -72,6 +76,12 @@ class Paciente(models.Model):
     def __str__(self):
         return "{} | {}".format(self.user.dni, self.user.first_name)
 
+class ProfesionalDeSalud(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profesional_profile')
+    pacientes = models.ManyToManyField(Paciente, related_name='paciente_list', blank=True)
+    
+    def __str__(self):
+        return "{} | {}".format(self.user.dni, self.user.first_name)
 
 class AutocontrolDiabetes(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
