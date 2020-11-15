@@ -77,6 +77,18 @@ class PacienteViewSet(viewsets.ModelViewSet):
         data = PacienteSerializer(user, context={'request':request}).data
         return Response(data, status=status.HTTP_200_OK)
 
+class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
+    queryset = ProfesionalDeSalud.objects.all() 
+    serializer_class = ProfesionalDeSaludSerializer
+    #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+
+    #paciente/dni/40861249
+    @action(methods=['get'], detail=False, url_path='dni/(?P<dni>[^/.]+)')
+    def get_profesional_by_dni(self, request, dni):
+        user = get_object_or_404(self.queryset, user__dni=dni)
+        data = PacienteSerializer(user, context={'request':request}).data
+        return Response(data, status=status.HTTP_200_OK)
+
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ECNT.objects.all()
     serializer_class = ECNTSerializer

@@ -67,6 +67,16 @@ class PacienteSerializer(serializers.ModelSerializer):
         fields = ['id','ultimo_autocontrol', 'ecnts', 'user']
         read_only_fields = ('id', 'user')
 
+class ProfesionalDeSaludSerializer(serializers.ModelSerializer):
+    pacientes =  PacienteSerializer(many=True, required=False)
+    user = UserSerializer(required=False)
+
+    class Meta:
+        model = ProfesionalDeSalud
+        fields = ['id','pacientes', 'user']
+        read_only_fields = ('id', 'user')
+
+
 class ACDiabetesSerializer(serializers.ModelSerializer):
     paciente_id = serializers.IntegerField()
     class Meta:
