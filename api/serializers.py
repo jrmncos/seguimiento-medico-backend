@@ -71,8 +71,6 @@ class PacienteSerializer(serializers.ModelSerializer):
         for element in ecnts_data:
             print(element['nombre'])
             ecnt = ECNT.objects.get(nombre=element['nombre'])
-            print("HI")
-            print(ecnt)
             instance.ecnts.add(ecnt)
         instance.save()
         return instance

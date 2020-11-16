@@ -85,7 +85,7 @@ class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=False, url_path='dni/(?P<dni>[^/.]+)')
     def get_profesional_by_dni(self, request, dni):
         user = get_object_or_404(self.queryset, user__dni=dni)
-        data = PacienteSerializer(user, context={'request':request}).data
+        data = ProfesionalDeSaludSerializer(user, context={'request':request}).data
         return Response(data, status=status.HTTP_200_OK)
     
     @action(methods=['patch'], detail=True)
@@ -95,7 +95,7 @@ class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
         profesional.pacientes.add(paciente)
         profesional.save()
         print(profesional)
-        return Response({}, status=status.HTTP_200_OK)
+        return Response(PacienteSerializer(paciente).data, status=status.HTTP_200_OK)
         #data = ProfesionalDeSaludSerializer(profesional,data={pacientes:})
     
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
