@@ -59,23 +59,32 @@ class ECNTSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', )
 
 class PacienteSerializer(serializers.ModelSerializer):
-    ecnts =  ECNTSerializer(many=True, required=False)
+    ecnts =  ECNTSerializer(many=True)
     user = UserSerializer(required=False)
-    
     class Meta:
         model = Paciente
         fields = ['id','ultimo_autocontrol', 'ecnts', 'user']
         read_only_fields = ('id', 'user')
+    
+    def update(self, instance, validated_data):
+        ecnts_data = validated_data.pop('ecnts')
+        for element in ecnts_data:
+            print(element['nombre'])
+            ecnt = ECNT.objects.get(nombre=element['nombre'])
+            print("HI")
+            print(ecnt)
+            instance.ecnts.add(ecnt)
+        instance.save()
+        return instance
+
 
 class ProfesionalDeSaludSerializer(serializers.ModelSerializer):
     pacientes =  PacienteSerializer(many=True, required=False)
     user = UserSerializer(required=False)
-
     class Meta:
         model = ProfesionalDeSalud
         fields = ['id','pacientes', 'user']
         read_only_fields = ('id', 'user')
-
 
 class ACDiabetesSerializer(serializers.ModelSerializer):
     paciente_id = serializers.IntegerField()
@@ -87,3 +96,4 @@ class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion
         fields = ['id','texto', 'imagen']
+

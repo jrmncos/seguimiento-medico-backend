@@ -16,5 +16,7 @@ router.register(r'acdiabetes', AutocontrolDiabetesViewSet, basename='acdiabetes'
 urlpatterns = [
     url(r'^', include(router.urls)),
     #path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    path('notification/', NotificacionView.as_view() )  # <-- And here
+    path('notification/', NotificacionView.as_view()),
+    path('profesionales/<int:pk>/dni/<int:dni>/', ProfesionalDeSaludViewSet.as_view({"patch": "add_paciente_by_dni"}))
+
 ]

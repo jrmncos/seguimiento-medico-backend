@@ -81,7 +81,7 @@ class ProfesionalDeSalud(models.Model):
     pacientes = models.ManyToManyField(Paciente, related_name='paciente_list', blank=True)
     
     def __str__(self):
-        return "{} | {}".format(self.user.dni, self.user.first_name)
+        return "{} | {} | {}".format(self.user.dni, self.user.first_name, self.pacientes)
 
 class AutocontrolDiabetes(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
