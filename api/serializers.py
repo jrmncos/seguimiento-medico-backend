@@ -18,9 +18,29 @@ class ECNTSerializer(serializers.ModelSerializer):
 
 #HyperlinkModelSerializer para ver el campo realted como una url
 
+class GroupSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Group
+        fields = ('name',)
 
 class UserSerializer(serializers.ModelSerializer):
-    """
+    groups = GroupSerializer(many=True)
+    
+    class Meta:
+        model = User
+        fields = ['id', 'dni', 'first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude', 'gender', 'expo_token', 'groups']
+        #Implicitamente se valida todo lo del model + el id va solo en la serializacion y la pass en la deserializacion
+        extra_kwargs = {
+            'groups': {'read_only': True},
+            'id': {'read_only': True},
+            'password': {'write_only': True}
+        }
+    
+    
+    def create(self, validated_data):
+       return User.objects.create_user(**validated_data)
+
+       """
     Ejemplo para validar un field
     def validate_password(self, value):
         if value.isalnum():
@@ -39,18 +59,6 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("first_name and last_name shouldn't be same.")
         return data
     """
-    class Meta:
-        model = User
-        fields = ['id', 'dni', 'first_name', 'last_name', 'password', 'bod', 'latitude', 'longitude', 'gender', 'expo_token']
-        #Implicitamente se valida todo lo del model + el id va solo en la serializacion y la pass en la deserializacion
-        extra_kwargs = {
-            'id': {'read_only': True},
-            'password': {'write_only': True}
-        }
-    
-    
-    def create(self, validated_data):
-       return User.objects.create_user(**validated_data)
        
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
