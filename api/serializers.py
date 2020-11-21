@@ -24,7 +24,7 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ('name',)
 
 class UserSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True)
+    groups = GroupSerializer(many=True, required=False)
     
     class Meta:
         model = User
@@ -38,9 +38,9 @@ class UserSerializer(serializers.ModelSerializer):
     
     
     def create(self, validated_data):
-       return User.objects.create_user(**validated_data)
+        return User.objects.create_user(**validated_data)  
 
-       """
+    """
     Ejemplo para validar un field
     def validate_password(self, value):
         if value.isalnum():
