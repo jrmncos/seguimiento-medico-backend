@@ -64,7 +64,13 @@ class UserViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(self.queryset, dni=dni)
         data = UserSerializer(user, context={'request':request}).data
         return Response(data, status=status.HTTP_200_OK)
-        
+
+class PacienteECNT:
+    def __init__(self, latitude, longitude, ecnts):
+        self.latitude = latitude
+        self.longitude = longitude
+        self.ecnts = ecnts
+
 class PacienteViewSet(viewsets.ModelViewSet):
     queryset = Paciente.objects.all() 
     serializer_class = PacienteSerializer
@@ -75,6 +81,16 @@ class PacienteViewSet(viewsets.ModelViewSet):
     def get_paciente_by_dni(self, request, dni):
         user = get_object_or_404(self.queryset, user__dni=dni)
         data = PacienteSerializer(user, context={'request':request}).data
+        return Response(data, status=status.HTTP_200_OK)
+    
+    @action(methods=['get'], detail=False, url_path='ecnts')
+    def get_pacientes_ecnts(self, request):
+        pacientes = self.queryset.all()
+        pacientesList = []
+        for paciente in pacientes:
+            pacientecnt = PacienteECNT(paciente.user.latitude, paciente.user.longitude, paciente.ecnts)
+            pacientesList.append(pacientecnt)
+        data = PacienteECNTSerializer(pacientesList, many=True).data
         return Response(data, status=status.HTTP_200_OK)
 
 class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
@@ -94,14 +110,12 @@ class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
         paciente = get_object_or_404(Paciente.objects.all(), user__dni=kwargs['dni'])
         profesional.pacientes.add(paciente)
         profesional.save()
-        print(profesional)
         return Response(PacienteSerializer(paciente).data, status=status.HTTP_200_OK)
         #data = ProfesionalDeSaludSerializer(profesional,data={pacientes:})
     
 class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ECNT.objects.all()
     serializer_class = ECNTSerializer
-    #permission_classes = (IsAuthenticated,)
 
 class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
     queryset = AutocontrolDiabetes.objects.all()
@@ -120,6 +134,7 @@ class NotificacionView(generics.CreateAPIView, generics.ListAPIView):
     serializer_class = NotificacionSerializer
     
     def create(self, request, *args, **kwargs):
+        console.log(request)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer, request)

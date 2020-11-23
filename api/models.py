@@ -104,7 +104,7 @@ class AutocontrolDiabetesOpcional(models.Model):
 
 class Notificacion(models.Model):
     #notificador = models.OneToOneField(User)
-    texto = models.CharField(max_length=150)
+    titulo = models.CharField(max_length=150)
     imagen = models.ImageField()
     #ecnts = models.ManyToManyField(ECNT, related_name='notificaciones')
     #generos = models.Choices()
