@@ -98,6 +98,13 @@ class ACDiabetesSerializer(serializers.ModelSerializer):
         model = AutocontrolDiabetes
         fields = ['id', 'glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal', 'paciente_id']
 
+class AlertaACDiabetesSerializer(serializers.ModelSerializer):
+    acdiabetes_id = serializers.IntegerField()
+    class Meta:
+        model = AlertaACDiabetes 
+        fields = ['id', 'detalles', 'acdiabetes_id']
+
+
 class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion

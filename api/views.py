@@ -76,6 +76,17 @@ class PacienteViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(self.queryset, user__dni=dni)
         data = PacienteSerializer(user, context={'request':request}).data
         return Response(data, status=status.HTTP_200_OK)
+   
+    @action(methods=['get'], detail=False, url_path='alertas/(?P<dni>[^/.]+)')
+    def get_alertas_by_dni(self, request, dni):
+        paciente = get_object_or_404(self.queryset, user__dni=dni)
+        alertas = []        
+        for acdiabetes in paciente.autocontroles_diabetes:
+            if(acdiabetes.alerta != None):
+                alertas.append(acdiabetes.alerta) 
+ 
+        data = AlertaACDiabetes(alertas, many=True).data
+        return Response(data, status=status.HTTP_200_OK)
 
 class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
     queryset = ProfesionalDeSalud.objects.all() 
@@ -102,6 +113,13 @@ class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gener
     queryset = ECNT.objects.all()
     serializer_class = ECNTSerializer
     #permission_classes = (IsAuthenticated,)
+
+class AlertaACDiabetesViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = AlertaACDiabetes.objects.all()
+    serializer_class = AlertaACDiabetesSerializer
+    #permission_classes = (IsAuthenticated,)
+
+
 
 class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
     queryset = AutocontrolDiabetes.objects.all()
