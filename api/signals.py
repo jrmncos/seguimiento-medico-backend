@@ -3,8 +3,8 @@ from django.contrib.auth.models import Group
 from django.db.models.signals import(
     post_save,
 )
-
-from .models import User, Paciente
+from .services import *
+from .models import User, Paciente, Notificacion
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
@@ -18,3 +18,9 @@ def update_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.paciente_profile.save()
+
+@receiver(post_save, sender=Notificacion)
+def send_notificacion(sender, instance, created ,**kwargs):
+    if created:
+        enviador_notificaciones = NotificadorService()
+        enviador_notificaciones.send_notificacion(instance)

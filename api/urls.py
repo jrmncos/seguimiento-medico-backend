@@ -11,12 +11,12 @@ router.register(r'ecnts', ECNTViewSet, basename='ecnt')
 router.register(r'pacientes', PacienteViewSet, basename='paciente')
 router.register(r'profesionales', ProfesionalDeSaludViewSet, basename='profesional')
 router.register(r'acdiabetes', AutocontrolDiabetesViewSet, basename='acdiabetes')
-#router.register(r'token', ObtainAuthToken, basename='token')
+router.register(r'alertadiabetes', AlertaACDiabetesViewSet, basename='alertadiabetes')
+#router.register(r'token', ObtainAuthToken, basename='token') 
 
 urlpatterns = [
     url(r'^', include(router.urls)),
     #path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('notification/', NotificacionView.as_view()),
-    path('profesionales/<int:pk>/dni/<int:dni>/', ProfesionalDeSaludViewSet.as_view({"patch": "add_paciente_by_dni"}))
-
+    path('profesionales/<int:pk>/dni/<int:dni>/', ProfesionalDeSaludViewSet.as_view({"patch": "add_paciente_by_dni"})),
 ]

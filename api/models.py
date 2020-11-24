@@ -15,6 +15,7 @@ GENDER_CHOICES = (
 paciente, created = Group.objects.get_or_create(name='Paciente')
 promotorSalud, created = Group.objects.get_or_create(name='Promotor de Salud')
 profesionalSalud, created = Group.objects.get_or_create(name='Profesional de Salud')
+profesionalSalud, created = Group.objects.get_or_create(name='Administrador')
 
 class User(AbstractBaseUser, PermissionsMixin):
  
@@ -39,6 +40,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+    
+    def get_edad(self):
+        import datetime
+        return datetime.date.today() - self.bod
 
     def get_full_name(self):
         '''
@@ -84,7 +89,7 @@ class ProfesionalDeSalud(models.Model):
         return "{} | {} | {}".format(self.user.dni, self.user.first_name, self.pacientes)
 
 class AutocontrolDiabetes(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name="autocontroles_diabetes")
     glucemia_matutina = models.BooleanField(null = True)
     opcional_glucemia_matutina = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
     glucemia_post_comida_principal = models.BooleanField(null = True)
@@ -101,13 +106,16 @@ class AutocontrolDiabetesOpcional(models.Model):
     cambio_orina = models.BooleanField(blank=True)
     perdida_vision = models.BooleanField(blank=True)
 
+class AlertaACDiabetes(models.Model):
+    autocontrol_diabetes = models.OneToOneField(AutocontrolDiabetes, on_delete=models.CASCADE, related_name='alerta')
+    detalles = models.CharField(max_length=1024)
+
+    def __str__(self):
+        return "AC diabetes relacionado: "+str(autocontrol_diabetes.id)+", Detalle: "+str(detalles)
 
 class Notificacion(models.Model):
-    #notificador = models.OneToOneField(User)
     titulo = models.CharField(max_length=150)
     imagen = models.ImageField()
-    #ecnts = models.ManyToManyField(ECNT, related_name='notificaciones')
-    #generos = models.Choices()
-    #edades = models.Choices()
+
     def __str__(self):
-        return self.imagen.name
+        return "{}".format(self.imagen.url) 

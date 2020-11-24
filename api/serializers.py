@@ -2,29 +2,13 @@ from rest_framework import serializers
 
 from .models import *
 
-# {FORM1 + FORM2 + FORM3}
-
-"""
-class AutocontrolDiabetesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AutocontrolDiabetes
-        fields= '__all__'
-
-class ECNTSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ECNT
-        fields = ['nombre', 'descripcion']
-"""
-
-#HyperlinkModelSerializer para ver el campo realted como una url
-
 class GroupSerializer(serializers.ModelSerializer):    
     class Meta:
         model = Group
         fields = ('name',)
 
 class UserSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True)
+    groups = GroupSerializer(many=True, required=False)
     
     class Meta:
         model = User
@@ -34,31 +18,10 @@ class UserSerializer(serializers.ModelSerializer):
             'groups': {'read_only': True},
             'id': {'read_only': True},
             'password': {'write_only': True}
-        }
-    
+        }  
     
     def create(self, validated_data):
-       return User.objects.create_user(**validated_data)
-
-       """
-    Ejemplo para validar un field
-    def validate_password(self, value):
-        if value.isalnum():
-            raise serializers.ValidationError('password must have atleast one special character.')
-        return value
-
-    Con este metodo puedo pre-procesar el diccionario que viene del frontend
-    def to_internal_value(self, data):
-        user_data = data['user']
-        return super().to_internal_value(user_data)
-        {'dni' : 40861249 }
-    
-    def validate(self, data):
-        print(data)
-        if data['first_name'] == data['last_name']:
-            raise serializers.ValidationError("first_name and last_name shouldn't be same.")
-        return data
-    """
+        return User.objects.create_user(**validated_data)  
        
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
@@ -103,8 +66,14 @@ class ACDiabetesSerializer(serializers.ModelSerializer):
         model = AutocontrolDiabetes
         fields = ['id', 'glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal', 'paciente_id']
 
+class AlertaACDiabetesSerializer(serializers.ModelSerializer):
+    acdiabetes_id = serializers.IntegerField()
+    class Meta:
+        model = AlertaACDiabetes 
+        fields = ['id', 'detalles', 'acdiabetes_id']
+
 class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion
-        fields = ['id','texto', 'imagen']
+        fields = ['id','titulo', 'imagen']
 

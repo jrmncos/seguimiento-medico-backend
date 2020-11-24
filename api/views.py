@@ -91,6 +91,16 @@ class PacienteViewSet(viewsets.ModelViewSet):
             pacientecnt = PacienteECNT(paciente.user.latitude, paciente.user.longitude, paciente.ecnts)
             pacientesList.append(pacientecnt)
         data = PacienteECNTSerializer(pacientesList, many=True).data
+   
+    @action(methods=['get'], detail=False, url_path='alertas/(?P<dni>[^/.]+)')
+    def get_alertas_by_dni(self, request, dni):
+        paciente = get_object_or_404(self.queryset, user__dni=dni)
+        alertas = []        
+        for acdiabetes in paciente.autocontroles_diabetes:
+            if(acdiabetes.alerta != None):
+                alertas.append(acdiabetes.alerta) 
+ 
+        data = AlertaACDiabetes(alertas, many=True).data
         return Response(data, status=status.HTTP_200_OK)
 
 class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
@@ -117,6 +127,11 @@ class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gener
     queryset = ECNT.objects.all()
     serializer_class = ECNTSerializer
 
+class AlertaACDiabetesViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = AlertaACDiabetes.objects.all()
+    serializer_class = AlertaACDiabetesSerializer
+    #permission_classes = (IsAuthenticated,)
+
 class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
     queryset = AutocontrolDiabetes.objects.all()
     serializer_class = ACDiabetesSerializer
@@ -134,16 +149,27 @@ class NotificacionView(generics.CreateAPIView, generics.ListAPIView):
     serializer_class = NotificacionSerializer
     
     def create(self, request, *args, **kwargs):
-        console.log(request)
-        serializer = self.get_serializer(data=request.data)
+        notificacion = {
+            "titulo": request.data.get("titulo"),
+            "imagen": request.data.get("imagen")
+        }
+        serializer = self.get_serializer(data=notificacion)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer, request)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
+        self.perform_create(serializer)
+        print('Esta todo bien')
+        print(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    """
     def perform_create(self, serializer, request):
         enviador_notificaciones = NotificadorService()
-        print(request.data)
-        enviador_notificaciones.send_notificacion(serializer.validated_data, filtros)
+        enviador_notificaciones.send_notificacion(serializer.validated_data)
         super().perform_create(serializer)
-        
+       
+
+    @staticmethod
+    def _get_users_by_filter(self, request):
+        users = User.objects.all()
+        print(request.data)
+        return users
+    """ 
