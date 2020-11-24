@@ -6,5 +6,5 @@ from .models import *
 admin.site.register(User)
 admin.site.register(ECNT)
 admin.site.register(Paciente)
-admin.site.register(AutocontrolDiabetes)
+admin.site.register(ACDiabetes)
 admin.site.register(ProfesionalDeSalud)

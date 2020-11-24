@@ -10,7 +10,7 @@ router.register(r'users', UserViewSet, basename='user')
 router.register(r'ecnts', ECNTViewSet, basename='ecnt')
 router.register(r'pacientes', PacienteViewSet, basename='paciente')
 router.register(r'profesionales', ProfesionalDeSaludViewSet, basename='profesional')
-router.register(r'acdiabetes', AutocontrolDiabetesViewSet, basename='acdiabetes')
+router.register(r'acdiabetes', ACDiabetesViewSet, basename='acdiabetes')
 router.register(r'alertadiabetes', AlertaACDiabetesViewSet, basename='alertadiabetes')
 #router.register(r'token', ObtainAuthToken, basename='token') 
 

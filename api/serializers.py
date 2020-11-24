@@ -4,18 +4,6 @@ from .models import *
 
 # {FORM1 + FORM2 + FORM3}
 
-"""
-class AutocontrolDiabetesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AutocontrolDiabetes
-        fields= '__all__'
-
-class ECNTSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ECNT
-        fields = ['nombre', 'descripcion']
-"""
-
 #HyperlinkModelSerializer para ver el campo realted como una url
 
 class GroupSerializer(serializers.ModelSerializer):    
@@ -59,7 +47,13 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("first_name and last_name shouldn't be same.")
         return data
     """
-       
+
+class ACDiabetesSerializer(serializers.ModelSerializer):
+    paciente_id = serializers.IntegerField()
+    class Meta:
+        model = ACDiabetes
+        fields = ['id', 'glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal', 'paciente_id']
+
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECNT
@@ -67,11 +61,12 @@ class ECNTSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', )
 
 class PacienteSerializer(serializers.ModelSerializer):
-    ecnts =  ECNTSerializer(many=True)
+    ecnts = ECNTSerializer(many=True)
+    autocontrol_diabetes = ACDiabetesSerializer(many=True)
     user = UserSerializer(required=False)
     class Meta:
         model = Paciente
-        fields = ['id','ultimo_autocontrol', 'ecnts', 'user']
+        fields = ['id','ultimo_autocontrol', 'ecnts', 'user', 'autocontrol_diabetes']
         read_only_fields = ('id', 'user')
     
     def update(self, instance, validated_data):
@@ -92,11 +87,6 @@ class ProfesionalDeSaludSerializer(serializers.ModelSerializer):
         fields = ['id','pacientes', 'user']
         read_only_fields = ('id', 'user')
 
-class ACDiabetesSerializer(serializers.ModelSerializer):
-    paciente_id = serializers.IntegerField()
-    class Meta:
-        model = AutocontrolDiabetes
-        fields = ['id', 'glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal', 'paciente_id']
 
 class AlertaACDiabetesSerializer(serializers.ModelSerializer):
     acdiabetes_id = serializers.IntegerField()

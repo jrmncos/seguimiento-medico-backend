@@ -14,50 +14,10 @@ from .services import *
 
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
-"""
-class UserViewSet(viewsets.ViewSet):
-    def list(self, request):
-       queryset = User.objects.all()
-       serializer = UserSerializer(queryset, many=True)
-       return Response(serializer.data)
-        
-    def create(self, request):
-        serializer = UserSerializer(data=request.data)
-        if (serializer.is_valid()):
-            serializer.save()
-            return Response(serializer.data, status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST )
-
-    def retrieve(self, request, pk=None):
-        queryset = User.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-    #Falta implementar
-    def partial_update(self, request, *args, **kwargs):
-        print('Partial update')
-        print(**kwargs)
-        print(request)
-        print(*args)
-        #queryset= User.objects.all()
-        #instance = queryset.get(pk=)
-        #serializer = UserSerializer(data=request.data, )
-        return True
-"""
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     #permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-
-    """
-    @action(methods=['get'], detail=True)
-    def get_id_paciente(self, request, pk=None):
-        user = get_object_or_404(self.queryset, pk=pk)
-        paciente_id = user.paciente_profile.id
-        print(paciente_id)
-        return Response({'id':paciente_id})
-    """
 
     @action(methods=['get'], detail=False, url_path='dni/(?P<dni>[^/.]+)')
     def get_user_by_dni(self, request, dni):
@@ -77,16 +37,16 @@ class PacienteViewSet(viewsets.ModelViewSet):
         data = PacienteSerializer(user, context={'request':request}).data
         return Response(data, status=status.HTTP_200_OK)
    
-    @action(methods=['get'], detail=False, url_path='alertas/(?P<dni>[^/.]+)')
-    def get_alertas_by_dni(self, request, dni):
-        paciente = get_object_or_404(self.queryset, user__dni=dni)
-        alertas = []        
-        for acdiabetes in paciente.autocontroles_diabetes:
-            if(acdiabetes.alerta != None):
-                alertas.append(acdiabetes.alerta) 
+    # @action(methods=['get'], detail=False, url_path='alertas/(?P<dni>[^/.]+)')
+    # def get_alertas_by_dni(self, request, dni):
+    #     paciente = get_object_or_404(self.queryset, user__dni=dni)
+    #     alertas = []        
+    #     for acdiabetes in paciente.autocontroles_diabetes:
+    #         if(acdiabetes.alerta != None):
+    #             alertas.append(acdiabetes.alerta) 
  
-        data = AlertaACDiabetes(alertas, many=True).data
-        return Response(data, status=status.HTTP_200_OK)
+    #     data = AlertaACDiabetes(alertas, many=True).data
+    #     return Response(data, status=status.HTTP_200_OK)
 
 class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
     queryset = ProfesionalDeSalud.objects.all() 
@@ -119,17 +79,24 @@ class AlertaACDiabetesViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, vi
     serializer_class = AlertaACDiabetesSerializer
     #permission_classes = (IsAuthenticated,)
 
-
-
-class AutocontrolDiabetesViewSet(viewsets.ModelViewSet):
-    queryset = AutocontrolDiabetes.objects.all()
+class ACDiabetesViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = ACDiabetes.objects.all()
     serializer_class = ACDiabetesSerializer
 
-    def perform_create(self, serializer):
-        autocontrol_service = AutocontrolDiabetesService()
-        autocontrol_service.check_autocontrol(serializer.validated_data)
-        
-        super().perform_create(serializer)
+    def create(self, request):
+        data = request.data
+        print()
+        print(str(data['paciente_id']))
+        print()
+        try:
+            paciente = Paciente.objects.get(pk=data['paciente_id'])
+        except Paciente.DoesNotExist:
+            raise NotFound('Paciente {} no existe.'.format(paciente_id))
+        serializer = ACDiabetesSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        acdiabetes = serializer.save(paciente_id=paciente.id)
+
+        return Response(acdiabetes, status=status.HTTP_201_CREATED, headers=headers)
 
 #class NotificacionView(viewsets.ViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 class NotificacionView(generics.CreateAPIView, generics.ListAPIView):
