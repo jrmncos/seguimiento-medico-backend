@@ -40,6 +40,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+    
+    def get_edad(self):
+        import datetime
+        return datetime.date.today() - self.bod
 
     def get_full_name(self):
         '''
@@ -110,11 +114,8 @@ class AlertaACDiabetes(models.Model):
         return "AC diabetes relacionado: "+str(autocontrol_diabetes.id)+", Detalle: "+str(detalles)
 
 class Notificacion(models.Model):
-    #notificador = models.OneToOneField(User)
-    texto = models.CharField(max_length=150)
+    titulo = models.CharField(max_length=150)
     imagen = models.ImageField()
-    #ecnts = models.ManyToManyField(ECNT, related_name='notificaciones')
-    #generos = models.Choices()
-    #edades = models.Choices()
+
     def __str__(self):
-        return self.imagen.name
+        return "{}".format(self.imagen.url) 

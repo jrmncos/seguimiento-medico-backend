@@ -22,8 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             'groups': {'read_only': True},
             'id': {'read_only': True},
             'password': {'write_only': True}
-        }
-    
+        }  
     
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)  
@@ -78,6 +77,11 @@ class PacienteSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class PacienteECNTSerializer(serializers.Serializer):
+    latitude = serializers.DecimalField(max_digits=20, decimal_places=15)
+    longitude = serializers.DecimalField(max_digits=20, decimal_places=15)
+    ecnts = ECNTSerializer(many=True)
+    
 
 class ProfesionalDeSaludSerializer(serializers.ModelSerializer):
     pacientes =  PacienteSerializer(many=True, required=False)
@@ -94,9 +98,8 @@ class AlertaACDiabetesSerializer(serializers.ModelSerializer):
         model = AlertaACDiabetes 
         fields = ['id', 'detalles', 'acdiabetes_id']
 
-
 class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion
-        fields = ['id','texto', 'imagen']
+        fields = ['id','titulo', 'imagen']
 
