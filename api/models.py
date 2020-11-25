@@ -97,7 +97,7 @@ class ACDiabetes(models.Model):
     fecha_hora_registro = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return "Glucemia matutina: " + str(glucemia_matutina) + "Glucemia post comida principal: " + str(glucemia_post_comida_principal)
+        return "Glucemia matutina: " + str(self.glucemia_matutina) + "Glucemia post comida principal: " + str(self.glucemia_post_comida_principal)
 
 class ACDiabetesOpcional(models.Model):
     autocontrol_diabetes = models.OneToOneField(ACDiabetes, on_delete=models.CASCADE, related_name='autocontrol_opcional')
@@ -111,7 +111,7 @@ class AlertaACDiabetes(models.Model):
     detalles = models.CharField(max_length=1024)
 
     def __str__(self):
-        return "AC diabetes relacionado: "+str(autocontrol_diabetes.id)+", Detalle: "+str(detalles)
+        return "AC diabetes relacionado: "+str(self.autocontrol_diabetes.id)+", Detalle: "+str(self.detalles)
 
 class Notificacion(models.Model):
     titulo = models.CharField(max_length=150)

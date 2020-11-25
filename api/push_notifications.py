@@ -1,12 +1,13 @@
-from exponent_server_sdk import DeviceNotRegisteredError
-from exponent_server_sdk import PushClient
-from exponent_server_sdk import PushMessage
-from exponent_server_sdk import PushResponseError
-from exponent_server_sdk import PushServerError
-from requests.exceptions import ConnectionError
-from requests.exceptions import HTTPError
+from exponent_server_sdk import (
+    DeviceNotRegisteredError,
+    PushClient,
+    PushMessage,
+    PushResponseError,
+    PushServerError,
+) 
+from requests.exceptions import ConnectionError, HTTPError
 
-
+    
 # Basic arguments. You should extend this function with the push features you
 # want to use, or simply pass in a `PushMessage` object.
 def send_push_message(token, message, extra=None):
@@ -17,6 +18,7 @@ def send_push_message(token, message, extra=None):
                         data=extra))
     except PushServerError as exc:
         # Encountered some likely formatting/validation error.
+        """
         rollbar.report_exc_info(
             extra_data={
                 'token': token,
@@ -25,12 +27,15 @@ def send_push_message(token, message, extra=None):
                 'errors': exc.errors,
                 'response_data': exc.response_data,
             })
+        """
         raise
     except (ConnectionError, HTTPError) as exc:
         # Encountered some Connection or HTTP error - retry a few times in
         # case it is transient.
+        """
         rollbar.report_exc_info(
             extra_data={'token': token, 'message': message, 'extra': extra})
+        """
         raise self.retry(exc=exc)
 
     try:
@@ -44,6 +49,7 @@ def send_push_message(token, message, extra=None):
         PushToken.objects.filter(token=token).update(active=False)
     except PushResponseError as exc:
         # Encountered some other per-notification error.
+        """
         rollbar.report_exc_info(
             extra_data={
                 'token': token,
@@ -51,4 +57,5 @@ def send_push_message(token, message, extra=None):
                 'extra': extra,
                 'push_response': exc.push_response._asdict(),
             })
+        """
         raise self.retry(exc=exc)
