@@ -1,4 +1,4 @@
-import pytest
+"""
 import json
 
 from api.models import User
@@ -9,17 +9,17 @@ from django_mock_queries.query import MockSet
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.exceptions import ValidationError
-from django.test import TestCase
-
+"""
+import pytest
+#from django.test import TestCase
+#pytestmark = pytest.mark.django_db
 """
 Al crear un user se crea un paciente
 """
-class Integration(TestCase):
-    def test_cli(self):
+class TestIntegration:
+    def test_save(self):
         assert True == True
     
-    def test_push(self):
-        assert True == True
 
 """
 class UserProfileTest(TestCase):
