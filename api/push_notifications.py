@@ -36,7 +36,7 @@ def send_push_message(token, message, extra=None):
         rollbar.report_exc_info(
             extra_data={'token': token, 'message': message, 'extra': extra})
         """
-        raise self.retry(exc=exc)
+        raise #self.retry(exc=exc)
 
     try:
         # We got a response back, but we don't know whether it's an error yet.
@@ -58,4 +58,4 @@ def send_push_message(token, message, extra=None):
                 'push_response': exc.push_response._asdict(),
             })
         """
-        raise self.retry(exc=exc)
+        raise #self.retry(exc=exc)
