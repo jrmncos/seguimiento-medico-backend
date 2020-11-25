@@ -17,6 +17,9 @@ Al crear un user se crea un paciente
 class Integration(TestCase):
     def test_cli(self):
         assert True == True
+    
+    def test_push(self):
+        assert True == True
 
 """
 class UserProfileTest(TestCase):
