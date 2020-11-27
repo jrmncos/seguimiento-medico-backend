@@ -92,24 +92,21 @@ class AlertaACDiabetesViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, vi
     serializer_class = AlertaACDiabetesSerializer
     #permission_classes = (IsAuthenticated,)
 
-class ACDiabetesViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class ACDiabetesViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ACDiabetes.objects.all()
     serializer_class = ACDiabetesSerializer
 
     def create(self, request):
         data = request.data
-        print()
-        print(str(data['paciente_id']))
-        print()
         try:
             paciente = Paciente.objects.get(pk=data['paciente_id'])
-        except Paciente.DoesNotExist:
+        except Paciente.DoesNotExist():
             raise NotFound('Paciente {} no existe.'.format(paciente_id))
         serializer = ACDiabetesSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         acdiabetes = serializer.save(paciente_id=paciente.id)
 
-        return Response(acdiabetes, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(acdiabetes, status=status.HTTP_201_CREATED)
 
 #class NotificacionView(viewsets.ViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 class NotificacionView(generics.CreateAPIView, generics.ListAPIView):

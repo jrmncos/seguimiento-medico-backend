@@ -51,7 +51,7 @@ class ACDiabetesSerializer(serializers.ModelSerializer):
     paciente_id = serializers.IntegerField()
     class Meta:
         model = ACDiabetes
-        fields = ['id', 'glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal', 'paciente_id']
+        fields = ['id','fecha_hora_registro', 'paciente_id','glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal']
 
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
