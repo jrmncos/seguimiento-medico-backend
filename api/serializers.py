@@ -100,5 +100,5 @@ class ProfesionalDeSaludSerializer(serializers.ModelSerializer):
 class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion
-        fields = ['id','titulo', 'imagen']
+        fields = ['id','titulo', 'imagen', 'fecha_creacion']
 
