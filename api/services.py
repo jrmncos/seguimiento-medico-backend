@@ -1,6 +1,24 @@
 from .push_notifications import *
-from .models import User
+from .models import User, AlertaACDiabetes, Paciente
 import json
+
+class AlertaACDiabetesService:
+    def check_autocontrol(self, autocontrol):
+        if(not autocontrol.glucemia_matutina or not autocontrol.glucemia_post_comida_principal):
+            alertaPredefinida = None
+            alertas = AlertaACDiabetes.objects.all()
+            
+            for alerta in alertas:
+                if(alerta.autocontrol_diabetes_id == autocontrol.id):
+                    alertaPredefinida = alerta
+
+            if(alertaPredefinida == None):
+                AlertaACDiabetes.objects.create(autocontrol_diabetes=autocontrol, detalles="Sus valores de glucosa no son normales, considere acudir a un médico")
+           
+            paciente = Paciente.objects.filter(id = autocontrol.paciente_id).first()
+            
+            if(paciente.user.expo_token != ""):
+                send_push_message(token=paciente.user.expo_token, message=alerta.detalles)
 
 class AutocontrolDiabetesService:
     def check_autocontrol(self, autocontrol):
@@ -18,7 +36,8 @@ class NotificadorService:
         print(url_json)
         users = User.objects.all()
         for user in users:
-            if(user.expo_token != None):
+            print("EXPO TOKEN: "+user.expo_token)
+            if(user.expo_token != ""):
                 send_push_message(token=user.expo_token, message=notificacion.titulo, extra=url_json)
             
             

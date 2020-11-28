@@ -53,6 +53,12 @@ class ACDiabetesSerializer(serializers.ModelSerializer):
         model = ACDiabetes
         fields = ['id','fecha_hora_registro', 'paciente_id','glucemia_matutina', 'opcional_glucemia_matutina', 'glucemia_post_comida_principal', 'opcional_glucemia_comida_principal']
 
+class AlertaACDiabetesSerializer(serializers.ModelSerializer):
+    autocontrol_diabetes_id = serializers.IntegerField()
+    class Meta:
+        model = AlertaACDiabetes 
+        fields = ['id', 'autocontrol_diabetes_id', 'detalles'] 
+
 class ECNTSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECNT
@@ -90,13 +96,6 @@ class ProfesionalDeSaludSerializer(serializers.ModelSerializer):
         model = ProfesionalDeSalud
         fields = ['id','pacientes', 'user']
         read_only_fields = ('id', 'user')
-
-
-class AlertaACDiabetesSerializer(serializers.ModelSerializer):
-    acdiabetes_id = serializers.IntegerField()
-    class Meta:
-        model = AlertaACDiabetes 
-        fields = ['id', 'detalles', 'acdiabetes_id']
 
 class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:

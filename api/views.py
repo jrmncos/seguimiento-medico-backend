@@ -87,7 +87,7 @@ class ECNTViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gener
     queryset = ECNT.objects.all()
     serializer_class = ECNTSerializer
 
-class AlertaACDiabetesViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class AlertaACDiabetesViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = AlertaACDiabetes.objects.all()
     serializer_class = AlertaACDiabetesSerializer
     #permission_classes = (IsAuthenticated,)
@@ -105,8 +105,9 @@ class ACDiabetesViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixi
         serializer = ACDiabetesSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         acdiabetes = serializer.save(paciente_id=paciente.id)
-
+        self.perform_create(serializer)
         return Response(acdiabetes, status=status.HTTP_201_CREATED)
+
 
 #class NotificacionView(viewsets.ViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 class NotificacionView(generics.CreateAPIView, generics.ListAPIView):
