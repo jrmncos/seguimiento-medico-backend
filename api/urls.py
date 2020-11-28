@@ -19,5 +19,5 @@ urlpatterns = [
     #path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('notification/', NotificacionView.as_view()),
     path('profesionales/<int:pk>/dni/<int:dni>/', ProfesionalDeSaludViewSet.as_view({"patch": "add_paciente_by_dni"})),
-    
+    path('pacientes/<int:pk>/acdiabetes/', ACDiabetesViewSet.as_view({"get": "list"})),
 ]
