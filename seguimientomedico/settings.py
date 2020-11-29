@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from celery.schedules import crontab
+import api.tasks
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -42,8 +44,8 @@ INSTALLED_APPS = [
     #'rest_framework.authtoken',
     'corsheaders',
     'oauth2_provider',
-    'djcelery',
     'django_celery_results',
+    'django_celery_beat'
 ]
 
 REST_FRAMEWORK = {
@@ -131,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Buenos_Aires'
 
 USE_I18N = True
 
@@ -167,3 +169,11 @@ OAUTH2_PROVIDER = {
 BROKER_URL = 'amqp://guest:guest@localhost//'
 
 CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_BEAT_SCHEDULE={
+     'add': {
+        'task': 'api.tasks.add',
+        'schedule': 10,
+        'args': (16, 16),
+    },
+}

@@ -9,5 +9,6 @@ pillow
 django-cors-headers
 django-oauth-toolkit
 celery
-django-celery
+#pipdjango-celery
 django-celery-results
+django-celery-beat
