@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     #'rest_framework.authtoken',
     'corsheaders',
     'oauth2_provider',
+    'djcelery',
+    'django_celery_results',
 ]
 
 REST_FRAMEWORK = {
@@ -161,3 +163,7 @@ OAUTH2_PROVIDER = {
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
     #'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 }
+
+BROKER_URL = 'amqp://guest:guest@localhost//'
+
+CELERY_RESULT_BACKEND = 'django-db'
