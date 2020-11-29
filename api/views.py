@@ -9,7 +9,7 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
-
+from rest_framework.pagination import PageNumberPagination
 from .services import *
 
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
@@ -135,13 +135,19 @@ class ACDiabetesViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixi
         self.perform_create(serializer)
         return Response(acdiabetes, status=status.HTTP_201_CREATED)
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 20
 
 #class NotificacionView(viewsets.ViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 class NotificacionView(generics.CreateAPIView, generics.ListAPIView):
     parser_classes = (MultiPartParser,)
     queryset = Notificacion.objects.all()
     serializer_class = NotificacionSerializer
-    
+    pagination_class = StandardResultsSetPagination
+    ordering=['fecha_creacion']
+
     def create(self, request, *args, **kwargs):
         notificacion = {
             "titulo": request.data.get("titulo"),
