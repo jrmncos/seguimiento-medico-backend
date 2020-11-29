@@ -111,7 +111,7 @@ class AlertaACDiabetes(models.Model):
     detalles = models.CharField(max_length=1024)
     
     def __str__(self):
-        return "AC diabetes relacionado: "+str(self.autocontrol_diabetes.id)+", Detalle: "+str(self.detalles)
+        return "ACDiabetes: "+str(self.autocontrol_diabetes.id)+", Detalle: "+str(self.detalles)
 
 class Notificacion(models.Model):
     titulo = models.CharField(max_length=150)
