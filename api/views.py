@@ -109,9 +109,9 @@ class ACDiabetesViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixi
         return Response(acdiabetes, status=status.HTTP_201_CREATED)
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 20
+    max_page_size = 10
 
 #class NotificacionView(viewsets.ViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 class NotificacionView(generics.CreateAPIView, generics.ListAPIView):

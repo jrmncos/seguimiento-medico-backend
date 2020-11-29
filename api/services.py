@@ -13,12 +13,12 @@ class AlertaACDiabetesService:
                     alertaPredefinida = alerta
 
             if(alertaPredefinida == None):
-                AlertaACDiabetes.objects.create(autocontrol_diabetes=autocontrol, detalles="Sus valores de glucosa no son normales, considere acudir a un médico")
+                alertaPredefinida = AlertaACDiabetes.objects.create(autocontrol_diabetes=autocontrol, detalles="Sus valores de glucosa no son normales, considere acudir a un médico")
            
             paciente = Paciente.objects.filter(id = autocontrol.paciente_id).first()
             
             if(paciente.user.expo_token != ""):
-                send_push_message(token=paciente.user.expo_token, message=alerta.detalles)
+                send_push_message(token=paciente.user.expo_token, message=alertaPredefinida.detalles)
 
 class AutocontrolDiabetesService:
     def check_autocontrol(self, autocontrol):
