@@ -75,7 +75,7 @@ class ECNT(models.Model):
 
 class Paciente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente_profile')
-    ultimo_autocontrol = models.CharField(max_length=30, null=True)
+    ultimo_autocontrol = models.DateTimeField()
     ecnts = models.ManyToManyField(ECNT, related_name='paciente_list', blank=True)
 
     def __str__(self):

@@ -1,10 +1,17 @@
 from .push_notifications import *
 from .models import User, AlertaACDiabetes, Paciente
+from .serializers import PacienteSerializer
 import json
+from datetime import datetime
+from datetime import date
+from rest_framework.response import Response
 
 class AlertaACDiabetesService:
     def check_autocontrol(self, autocontrol):
         if(not autocontrol.glucemia_matutina or not autocontrol.glucemia_post_comida_principal):
+            today = date.today()
+            detalleAlerta = "Autocontrol: "+str(today.strftime("%d/%m/%Y"))+", valores de glucosa anormales."
+
             alertaPredefinida = None
             alertas = AlertaACDiabetes.objects.all()
             
@@ -13,17 +20,13 @@ class AlertaACDiabetesService:
                     alertaPredefinida = alerta
 
             if(alertaPredefinida == None):
-                alertaPredefinida = AlertaACDiabetes.objects.create(autocontrol_diabetes=autocontrol, detalles="Sus valores de glucosa no son normales, considere acudir a un médico")
-           
+                alertaPredefinida = AlertaACDiabetes.objects.create(autocontrol_diabetes=autocontrol, 
+                detalles=detalleAlerta)
+
             paciente = Paciente.objects.filter(id = autocontrol.paciente_id).first()
             
             if(paciente.user.expo_token != ""):
                 send_push_message(token=paciente.user.expo_token, message=alertaPredefinida.detalles)
-
-class AutocontrolDiabetesService:
-    def check_autocontrol(self, autocontrol):
-        print("Entre aca!")
-        send_push_message(token="ExponentPushToken[JdQCN9J3DdXe_t6uBhV3jJ]", message="Soy la segunda notificacion push")
 
 class NotificadorService:
     def send_notificacion(self, notificacion):

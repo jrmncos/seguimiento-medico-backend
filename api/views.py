@@ -132,8 +132,10 @@ class ACDiabetesViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixi
         serializer = ACDiabetesSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         acdiabetes = serializer.save(paciente_id=paciente.id)
+        paciente.ultimo_autocontrol = acdiabetes.fecha_hora_registro
+        paciente.save()
         self.perform_create(serializer)
-        return Response(acdiabetes, status=status.HTTP_201_CREATED)
+        return Response(ACDiabetesSerializer(acdiabetes).data, status=status.HTTP_201_CREATED)
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
