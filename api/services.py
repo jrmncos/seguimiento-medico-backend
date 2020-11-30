@@ -5,6 +5,20 @@ import json
 from datetime import datetime
 from datetime import date
 from rest_framework.response import Response
+from django.utils.timezone import timezone
+
+class AutocontroladorService:
+    def check_ultimo_autocontrol(self):
+        print("Voy a controlar a les pacientes")
+        pacientes = Paciente.objects.all()
+        for paciente in pacientes:
+            #print('Hola')
+            #print(paciente.ultimo_autocontrol.date)
+            #print(timezone.now())
+            #delta = timezone.now()- paciente.ultimo_autocontrol.date
+            #if delta.days > 1:
+                print("No se realizo el autocontrol de hoy")
+                #send_push_message(token=paciente.user.expo_token, message="Por favor ingresa tu autocontrol diario")
 
 class AlertaACDiabetesService:
     def check_autocontrol(self, autocontrol):

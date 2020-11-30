@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 from celery.schedules import crontab
-import api.tasks
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -168,9 +167,8 @@ BROKER_URL = 'amqp://guest:guest@localhost//'
 CELERY_RESULT_BACKEND = 'django-db'
 
 CELERY_BEAT_SCHEDULE={
-     'add': {
-        'task': 'api.tasks.add',
-        'schedule': crontab(),
-        'args': (16, 16),
+     'autocontrolador': {
+        'task': 'api.tasks.autocontrolador',
+        'schedule': 10,
     },
 }
