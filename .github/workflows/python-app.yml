@@ -34,12 +34,12 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
-    - name: Deploy django to heroku
-        uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "seguimientomedico" #Must be unique in Heroku
-          heroku_email: "costillagermanalfredo@gmail.com"
-          usedocker: true
+    
+    -uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: "seguimientomedico" #Must be unique in Heroku
+        heroku_email: "costillagermanalfredo@gmail.com"
+        usedocker: true
   deploy:
 
