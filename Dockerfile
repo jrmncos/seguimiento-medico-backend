@@ -6,4 +6,4 @@ COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 COPY . /code/
 
-CMD python manage.py runserver 0.0.0.0:$PORT
+CMD python3 manage.py migrate && python manage.py runserver 0.0.0.0:$PORT
