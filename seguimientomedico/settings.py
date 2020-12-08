@@ -51,9 +51,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
-    'DEFAULT_PAGINATION_CLASS': 
-        'rest_framework.pagination.LimitOffsetPagination',
-        'PAGE_SIZE': 100
+
     
 }
 """
@@ -99,8 +97,12 @@ WSGI_APPLICATION = 'seguimientomedico.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -161,14 +163,20 @@ OAUTH2_PROVIDER = {
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
     #'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 }
-
+"""
 BROKER_URL = 'amqp://guest:guest@localhost//'
 
 CELERY_RESULT_BACKEND = 'django-db'
+"""
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE={
      'autocontrolador': {
         'task': 'api.tasks.autocontrolador',
-        'schedule': 10,
+        'schedule': crontab()
     },
 }
