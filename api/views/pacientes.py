@@ -5,7 +5,7 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 
-from api.models import Paciente
+from api.models import Paciente, ECNT
 from api.serializers import PacienteSerializer, PacienteECNTSerializer
 
 class PacienteECNTDTO:
@@ -35,13 +35,14 @@ class PacienteViewSet(viewsets.ModelViewSet):
             pacientesList.append(pacientecnt)
         data = PacienteECNTSerializer(pacientesList, many=True).data
         return Response(data, status=status.HTTP_200_OK)
-    # @action(methods=['get'], detail=False, url_path='alertas/(?P<dni>[^/.]+)')
-    # def get_alertas_by_dni(self, request, dni):
-    #     paciente = get_object_or_404(self.queryset, user__dni=dni)
-    #     alertas = []        
-    #     for acdiabetes in paciente.autocontroles_diabetes:
-    #         if(acdiabetes.alerta != None):
-    #             alertas.append(acdiabetes.alerta) 
- 
-    #     data = AlertaACDiabetes(alertas, many=True).data
-    #     return Response(data, status=status.HTTP_200_OK)
+
+    @action(methods=['patch'], detail=True)
+    def add_ecnts(self, request, *args, **kwargs):
+        paciente = self.get_object()
+        data = PacienteSerializer(paciente, context={'request':request}).data
+        paciente.ecnts.clear()
+        for ecnt in request.data['ecnts']:
+            paciente.ecnts.add(ECNT.objects.get(nombre=ecnt['nombre'])) 
+
+        paciente.save()
+        return Response(PacienteSerializer(paciente).data, status=status.HTTP_200_OK)
