@@ -5,8 +5,8 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 
-from api.models import ProfesionalDeSalud
-from api.serializers import ProfesionalDeSaludSerializer
+from api.models import ProfesionalDeSalud, Paciente
+from api.serializers import ProfesionalDeSaludSerializer, PacienteSerializer
 
 class ProfesionalDeSaludViewSet(viewsets.ModelViewSet):
     queryset = ProfesionalDeSalud.objects.all() 

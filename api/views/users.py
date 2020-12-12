@@ -5,7 +5,7 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 
-from api.models import User, Group
+from api.models import User, Group, ProfesionalDeSalud
 from api.serializers import UserSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -26,6 +26,11 @@ class UserViewSet(viewsets.ModelViewSet):
         user.groups.clear()
         for grupo in request.data['groups']:
             user.groups.add(Group.objects.get(name=grupo['name'])) 
-
+        for grupo in user.groups.all():
+            print(grupo)
+            if grupo.name == "Profesional de Salud" and not hasattr(user, 'profesional_profile'):
+                print('arigato')
+                profesional = ProfesionalDeSalud(user=user)
+                profesional.save()
         user.save()
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
