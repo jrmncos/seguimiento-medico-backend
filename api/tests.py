@@ -10,17 +10,72 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.exceptions import ValidationError
 """
+import datetime
+import json
+from time import strftime
+
 import pytest
+from django.urls import reverse
+from django_mock_queries.query import MockSet
+from rest_framework.exceptions import ValidationError
+
+from api.models import *
+from api.serializers import *
 #from django.test import TestCase
 #pytestmark = pytest.mark.django_db
 """
 Al crear un user se crea un paciente
 """
-class TestIntegration:
-    def test_save(self):
-        assert True == True
-    
 
+    """
+    def test_expected_serializer_json(self):
+            expected_results = {
+                'id': 1,
+                'dni': 40861249,
+                'first_name': "German",
+                "last_name": "Costilla",
+                "password": "abc121bca",
+                "bod": str(datetime.datetime.now()),
+                "latitude": str(-34.500728717200),
+                "longitude": str(-58.725495777400),
+                "gender": "M",
+                "expo_token": "ExpoToken[1234679265]"
+            }
+
+            user = User(**expected_results)
+
+            results = UserSerializer(user).data
+
+            assert results == expected_results
+    
+    def test_raise_error_when_missing_required_field(self):
+            expected_results = {
+                'id': 1,
+                "last_name": "Costilla",
+                "password": "abc121bca",
+                "bod": str(datetime.datetime.now()),
+                "latitude": str(-34.500728717200),
+                "longitude": str(-58.725495777400),
+                "gender": "M",
+                "expo_token": "ExpoToken[1234679265]"
+            }
+
+            serializer = UserSerializer(data=expected_results)
+
+            with pytest.raises(ValidationError):
+                serializer.is_valid(raise_exception=True)
+
+User(email = "santiagodgalvan@gmail.com",
+        first_name = "Santiago",
+        last_name = "Galvan",
+        bod = "1995-01-05",
+        dni = 38692907,
+        latitude = -34.500728717200,
+        longitude = -58.725495777400)
+
+
+self.assertTrue(hasattr(user, 'paciente_profile'))
+"""
 """
 class UserProfileTest(TestCase):
     def test_user_model_has_profile(self):

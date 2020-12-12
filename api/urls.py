@@ -21,4 +21,5 @@ urlpatterns = [
     path('profesionales/<int:pk>/dni/<int:dni>/', ProfesionalDeSaludViewSet.as_view({"patch": "add_paciente_by_dni"})),
     path('pacientes/<int:pk>/acdiabetes/', ACDiabetesViewSet.as_view({"get": "list"})),
     path('pacientes/<int:id>/alertadiabetes/', AlertaACDiabetesViewSet.as_view({"get": "get_alertas_by_paciente_id"})),
+    path('users/<int:pk>/groups/', UserViewSet.as_view({"patch": "add_groups"})),
 ]
