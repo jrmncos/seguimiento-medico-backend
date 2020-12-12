@@ -1,11 +1,13 @@
 from django.utils import timezone
 
 from api.models import User, AlertaACDiabetes, Paciente
+from datetime import date
+from .notificador import NotificadorService
 
 class AutocontroladorService:
-
     def check_autocontrol(self, autocontrol):
         if(not autocontrol.glucemia_matutina or not autocontrol.glucemia_post_comida_principal):
+            notificador = NotificadorService()
             today = date.today()
             detalleAlerta = "Autocontrol: "+str(today.strftime("%d/%m/%Y"))+", valores de glucosa anormales."
 
@@ -23,9 +25,10 @@ class AutocontroladorService:
             paciente = Paciente.objects.filter(id = autocontrol.paciente_id).first()
             
             if(paciente.user.expo_token != ""):
-                send_push_message(token=paciente.user.expo_token, message=alertaPredefinida.detalles)
+                notificador.send_push_message(token=paciente.user.expo_token, message=alertaPredefinida.detalles)
 
     def check_ultimo_autocontrol(self):
+        notificador = NotificadorService()
         print("Voy a controlar a les pacientes")
         pacientes = Paciente.objects.all()
         for paciente in pacientes:
@@ -35,4 +38,4 @@ class AutocontroladorService:
                 print(delta)
                 if delta.days > 1:
                     print("No se realizo el autocontrol de hoy")
-                    send_push_message(token=paciente.user.expo_token, message="Por favor ingresa tu autocontrol diario")
+                    notificador.send_push_message(token=paciente.user.expo_token, message="Por favor ingresa tu autocontrol diario")

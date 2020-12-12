@@ -5,9 +5,9 @@ from .paciente import Paciente
 class ACDiabetes(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name="autocontrol_diabetes")
     glucemia_matutina = models.BooleanField(null = True,)
-    opcional_glucemia_matutina = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    opcional_glucemia_matutina = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     glucemia_post_comida_principal = models.BooleanField(null = True)
-    opcional_glucemia_comida_principal = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    opcional_glucemia_comida_principal = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     fecha_hora_registro = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

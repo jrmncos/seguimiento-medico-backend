@@ -22,13 +22,13 @@ def save_user_profile(sender, instance, **kwargs):
 @receiver(post_save, sender=ACDiabetes)
 def save_acdiabetes(sender, instance, created ,**kwargs):
     if created:
-        alertador = AlertaACDiabetesService()
+        alertador = AutocontroladorService()
         alertador.check_autocontrol(instance) 
 
 @receiver(post_save, sender=ACDiabetes)
 def update_acdiabetes(sender, instance, created ,**kwargs):
     if not created:
-        alertador = AlertaACDiabetesService()
+        alertador = AutocontroladorService()
         alertador.check_autocontrol(instance) 
 
 
