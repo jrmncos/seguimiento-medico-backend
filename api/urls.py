@@ -7,6 +7,7 @@ from django.urls import path
 from django.conf import settings
 router = routers.SimpleRouter()
 router.register(r'users', UserViewSet, basename='user')
+router.register(r'groups', GroupViewSet, basename='group')
 router.register(r'ecnts', ECNTViewSet, basename='ecnt')
 router.register(r'pacientes', PacienteViewSet, basename='paciente')
 router.register(r'profesionales', ProfesionalDeSaludViewSet, basename='profesional')

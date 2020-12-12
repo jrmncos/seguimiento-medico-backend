@@ -12,6 +12,11 @@ GENDER_CHOICES = (
     ('Masculino', 'Masculino')
 )
 
+paciente, created = Group.objects.get_or_create(name='Paciente')
+promotorSalud, created = Group.objects.get_or_create(name='Promotor de Salud')
+profesionalSalud, created = Group.objects.get_or_create(name='Profesional de Salud')
+administrador, created = Group.objects.get_or_create(name='Administrador')
+
 class User(AbstractBaseUser, PermissionsMixin):
  
     email = models.EmailField(_('email address'), blank=True)

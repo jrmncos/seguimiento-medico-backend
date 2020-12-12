@@ -3,7 +3,6 @@ from rest_framework import serializers
 from .models import *
 
 # {FORM1 + FORM2 + FORM3}
-
 #HyperlinkModelSerializer para ver el campo realted como una url
 
 class GroupSerializer(serializers.ModelSerializer):    

@@ -5,7 +5,7 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 
-from api.models import AlertaACDiabetes
+from api.models import AlertaACDiabetes, Paciente
 from api.serializers import AlertaACDiabetesSerializer, PacienteSerializer
 
 class AlertaACDiabetesViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):

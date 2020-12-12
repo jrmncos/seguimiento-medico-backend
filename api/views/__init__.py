@@ -5,3 +5,4 @@ from .notificaciones import *
 from .pacientes import *
 from .profesionales import *
 from .users import *
+from .groups import *
