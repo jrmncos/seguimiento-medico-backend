@@ -176,6 +176,6 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE={
      'autocontrolador': {
         'task': 'api.tasks.autocontrolador',
-        'schedule': crontab()
+        'schedule': crontab(minute='*/10')
     },
 }
